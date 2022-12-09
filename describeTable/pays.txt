@@ -1,0 +1,8 @@
+idPays;;int
+-----
+nomPays;;String
+-----
+continent;;String
+-----
+superficie;;double
+-----

@@ -1,0 +1,8 @@
+idPersonne;;int
+-----
+nom;;String
+-----
+age;;int
+-----
+job;;String
+-----

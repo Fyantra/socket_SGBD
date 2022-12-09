@@ -1,0 +1,12 @@
+1;;Koto;;26;;Journaliste;;
+-----
+2;;Bertrand;;55;;Directeur;;
+-----
+3;;Paul;;56;;Ministre;;
+-----
+4;;Jean;;41;;Courrier;;
+-----
+5;;Joseph;;38;;Pasteur;;
+-----
+6;;Dylan;;19;;Etudiant;;
+-----

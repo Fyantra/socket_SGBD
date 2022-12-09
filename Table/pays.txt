@@ -1,0 +1,12 @@
+1;;Madagascar;;Afrique;;2.5E7;;
+-----
+2;;Pays-Bas;;Europe;;500000.0;;
+-----
+3;;Canada;;Amerique;;5.64E8;;
+-----
+4;;Chine;;Asie;;5.0E8;;
+-----
+5;;Australie;;Oceanie;;3.0E8;;
+-----
+6;;Bresil;;Amerique Latine;;6.3E8;;
+-----

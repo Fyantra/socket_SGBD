@@ -1,0 +1,12 @@
+Messi;;35;;3.0E7;;PSG;;
+-----
+Ronaldo;;37;;5.0E7;;Manchester United;;
+-----
+Salah;;30;;1.05E7;;Liverpool;;
+-----
+Neymar;;30;;7.0E7;;PSG;;
+-----
+Dimaria;;35;;2.5E7;;Juventus;;
+-----
+Lewandowski;;34;;7.6E7;;Barcelone;;
+-----
