@@ -1,0 +1,10 @@
+Griezmann;;31;;2.7E7;;Atletico de madrid;;
+-----
+Mane;;30;;5.0E7;;Bayern;;
+-----
+Haaland;;23;;3.0E8;;Man City;;
+-----
+Salah;;30;;1.05E7;;Liverpool;;
+-----
+Lewandowski;;34;;7.6E7;;Barcelone;;
+-----

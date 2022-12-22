@@ -1,21 +1,24 @@
 package objets;
 
 
-public class Table {    //classe pouvant etre serialisee
+import java.io.Serializable;
+
+public class Table implements Serializable {    //classe pouvant etre serialisee
     String nom;
-    Object[] entete;
-    Object[][] data;
+    Object[] colonne;
+    Object[][] data;    
+    Table [] isTableSelect;
 
     public Table(){}
 
     public Table(Object[]e, Object[][] d) {
-        setEntete(e);
+        setcolonne(e);
         setData(d);
     }
 
     public Table(String n, Object[]e, Object[][] d) {
         setNom(n);
-        setEntete(e);
+        setcolonne(e);
         setData(d);
     }
 
@@ -27,8 +30,8 @@ public class Table {    //classe pouvant etre serialisee
         return nom;
     }
 
-    public Object[] getEntete() {
-        return entete;
+    public Object[] getcolonne() {
+        return colonne;
     }
 
     public Object[][] getData() {
@@ -39,7 +42,16 @@ public class Table {    //classe pouvant etre serialisee
         this.data = data;
     }
 
-    public void setEntete(Object[] entete) {
-        this.entete = entete;
+    public void setcolonne(Object[] colonne) {
+        this.colonne = colonne;
     }
+
+    public Table[] getisTableSelect() {
+        return isTableSelect;
+    }
+
+    public void setisTableSelect(Table[] isTableSelect) {
+        this.isTableSelect = isTableSelect;
+    }
+
 }

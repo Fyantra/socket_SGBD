@@ -9,32 +9,8 @@ import fonction.Operation;
 
 import java.lang.reflect.*;
 
-public class Fonction { 
+public class Fonction {
 
-
-    public Syntaxe[] getSyntaxeOperation () {
-        Syntaxe union = new Syntaxe("union"); Syntaxe inter = new Syntaxe("inter"); Syntaxe aoe = new Syntaxe("aoe");
-        Syntaxe from = new Syntaxe("from"); Syntaxe and = new Syntaxe("and"); Syntaxe join = new Syntaxe("join");
-        Syntaxe produit = new Syntaxe("produit"); Syntaxe difference = new Syntaxe("not in"); //difference
-        Syntaxe in = new Syntaxe("in"); Syntaxe division = new Syntaxe("division");
-        union.setUnion(from); inter.setUnion(from); join.setUnion(from); produit.setUnion(from);
-        
-        //<------------Syntaxe------------------->
-        Syntaxe[] syntaxes = {union, inter, aoe, and, join, produit, difference, in, division};
-        return syntaxes;
-    }
-
-    public Syntaxe[] getLanguageSQL () {
-        Syntaxe select = new Syntaxe("select"); Syntaxe etoile = new Syntaxe("*");
-        Syntaxe in = new Syntaxe("in"); Syntaxe and = new Syntaxe("and");
-        Syntaxe from = new Syntaxe("from"); Syntaxe create = new Syntaxe("create");
-        Syntaxe table = new Syntaxe("table"); Syntaxe values = new Syntaxe("values"); 
-        Syntaxe insert = new Syntaxe("insert"); Syntaxe into = new Syntaxe("into");
-
-        //<-----------Syntaxe---------------->
-        Syntaxe[] sql = { select, etoile, in, and, from, create, table, values, insert, into}; 
-        return sql;
-    }
     /////Les fonctions Statiques
     public static String [] getDonneeInsertion (String request) {
         String s1 = request.substring(request.lastIndexOf("(") + 1, request.lastIndexOf(")"));
@@ -67,23 +43,30 @@ public class Fonction {
         
         return type;
     }
-        /////////////////////////////////////////////////////////////////////
 
-    public Object [][] getData2DimBytri (Table t) throws Exception {
+    public Object [][] fetchTo2D (Table t) throws Exception {
+        
         Object[][] lo2 = t.getData();
+        
         Object[][]rep = new Object[lo2.length][lo2[0].length];
+        
         Vector vToTri = new Vector();
-        //System.out.println("lo2.length " +lo2.length);
+        
+        
         for (int i = 0; i < lo2.length; i++) {
-            vToTri.add(lo2[i][0]); // tri par colonne 1 par defaut
+            vToTri.add(lo2[i][0]); 
         }
 
         InputOutput e = new InputOutput();
+        
         Object[] type = e.getTypesTableInFile(t.getNom());
+        
         String typeStr = type[0].toString();
+        
         if(typeStr.equalsIgnoreCase("string") == false && typeStr.equalsIgnoreCase("date") == false && typeStr.equalsIgnoreCase("boolean") == false ){
-            System.out.println("tri numerique");
+        
             vToTri.sort(null); //tri numerique
+        
             Object[] indTri = vToTri.toArray();
         
             for (Object[] ligne : lo2) {
@@ -95,22 +78,16 @@ public class Fonction {
             }
         } 
         else {
-            System.out.println("tri alphabetique");
-            Collections.sort(vToTri); // tri alphabetique
-            //System.out.println(vToTri.size());
+            
+            Collections.sort(vToTri); // tri alpha
+           
             Object[] indTri = vToTri.toArray();
         
             for (Object[] ligne : lo2) {
                 for (int i = 0; i < indTri.length; i++) {
                     if(indTri[i].toString().compareTo(ligne[0].toString()) == 0) {
                         rep[i] = ligne;
-                        // if(R == 4) {
-                        //     System.out.print("ligne "+i+" : ");
-                        //     for (Object object : ligne) {
-                        //       System.out.print(object+" ");   
-                        //     }
-                        //     System.out.println();
-                        // }
+                        
                     }
                 }
             }
@@ -119,54 +96,88 @@ public class Fonction {
         return rep;
     }
 
+    public Object [][] fetchTo2D (Object[][] lo2) throws Exception {
+        Table t = new Table();
+        Object[][]rep = new Object[lo2.length][lo2[0].length];
+        Vector vToTri = new Vector();
+        for (int i = 0; i < lo2.length; i++) {
+            vToTri.add(lo2[i][0]); 
+        }
 
-    
-    public Object[][] updateMiverina(Table t) throws Exception {
-        Object[][] lo = t.getData();
-        InputOutput e = new InputOutput();
-        Object[] type = e.getTypesTableInFile(t.getNom());
-        Object[][] vitatri = lo;
-        // if(type[0].toString().equalsIgnoreCase("string") == false) {
-            vitatri = getData2DimBytri(t);
-            // System.out.println("ouuuut table "+t.getNom());
-            // displayAll(new Table(t.getEntete(), vitatri));
-        // }
-        Vector ligneVect = new Vector();
-        Object[] ligneInitial = vitatri[0];
-        ligneVect.add(ligneInitial);
-
-        for (int i = 0; i < vitatri.length; i++) {
-            //System.out.println(isDoublure(ligneInitial, vitatri[i]));
-            if(checkStringMverina(ligneInitial, vitatri[i]) == false) {
-                ligneInitial = vitatri[i];
-                ligneVect.add(ligneInitial);
+        InputOutput in = new InputOutput();
+        Object[] type = in.getTypesTableInFile(t.getNom());
+        String typeStr = type[0].toString();
+        if(typeStr.equalsIgnoreCase("string") == true) {
+            vToTri.sort(null); //tri
+        } 
+        
+        Object[] indTri = vToTri.toArray();
+        
+        for (Object[] ligne : lo2) {
+            for (int i = 0; i < indTri.length; i++) {
+                if(Integer.parseInt(indTri[i].toString()) == Integer.parseInt(ligne[0].toString())) {
+                    rep[i] = ligne;
+                }
             }
         }
 
-        Object[][]rep =getByvector(ligneVect);
         return rep;
     }
 
-    public Object[][] updateMiverina(Object[][] lo) throws Exception {
-        InputOutput e = new InputOutput();
-        Object[] type = e.getTypesTableInFile("inscription");
-        Object[][] vitatri = lo;
-        if(type[0].toString().equalsIgnoreCase("string") == false) {
-            vitatri = getData2DimBytri(lo);
-        }
-        Vector ligneVect = new Vector();
-        Object[] ligneInitial = vitatri[0];
-        ligneVect.add(ligneInitial);
+    public Object[][] updateMitovy(Table t) throws Exception {
+        Object[][] lo = t.getData();
+        
+        InputOutput in = new InputOutput();
+        
+        Object[] type = in.getTypesTableInFile(t.getNom());
+        
+        Object[][] obj = lo;
+       
+            obj = fetchTo2D(t);
+         
+        Vector v = new Vector();
+       
+        Object[] ligneInitial = obj[0];
+       
+        v.add(ligneInitial);
 
-        for (int i = 0; i < vitatri.length; i++) {
-            //System.out.println(isDoublure(ligneInitial, vitatri[i]));
-            if(checkStringMverina(ligneInitial, vitatri[i]) == false) {
-                ligneInitial = vitatri[i];
-                ligneVect.add(ligneInitial);
+        for (int i = 0; i < obj.length; i++) {
+            
+            if(isDoublureString(ligneInitial, obj[i]) == false) {
+                ligneInitial = obj[i];
+                v.add(ligneInitial);
             }
         }
 
-        Object[][]rep =getByvector(ligneVect);
+        Object[][]rep =getByvector(v);
+        return rep;
+    }
+
+    public Object[][] updateMitovy(Object[][] lo) throws Exception {
+        InputOutput in = new InputOutput();
+        
+        Object[] type = in.getTypesTableInFile("joueurr");
+        
+        Object[][] obj = lo;
+        if(type[0].toString().equalsIgnoreCase("string") == false) {
+            obj = fetchTo2D(lo);
+        }
+        
+        Vector v = new Vector();
+        
+        Object[] ligneInitial = obj[0];
+        
+        v.add(ligneInitial);
+
+        for (int i = 0; i < obj.length; i++) {
+            //System.out.println(isDoublure(ligneInitial, obj[i]));
+            if(isDoublureString(ligneInitial, obj[i]) == false) {
+                ligneInitial = obj[i];
+                v.add(ligneInitial);
+            }
+        }
+
+        Object[][]rep =getByvector(v);
         return rep;
     }
 
@@ -177,11 +188,15 @@ public class Fonction {
         return false;
     }
 
-    public Object[][] listerObjetA2Dim(Object[][] l21, Object[][] l22) {
+    public Object[][] merge2Obj(Object[][] l21, Object[][] l22) {
         int nbLignes = l21.length + l22.length;
+        
         int nbCol = l21[0].length;
+        
         Object[][] rep = new Object[nbLignes][nbCol];
+        
         int indLigne = 0;
+        
         int indCol = 0;
 
         for (int i = 0; i < l21.length; i++) {
@@ -210,7 +225,7 @@ public class Fonction {
     ////////////////////////////////////////////////////////////////
     
     public int getIndColonne(String colonne, Table table) throws Exception {    //maka anle indicenle colonne mitovy aminazy
-        Object[] colonnes = table.getEntete();
+        Object[] colonnes = table.getcolonne();
         
         for (int i = 0; i < colonnes.length; i++) {
             
@@ -253,6 +268,29 @@ public class Fonction {
         return rep;
     }
 
+    public Syntaxe[] getSyntaxeOperation () {
+        Syntaxe union = new Syntaxe("union"); Syntaxe inter = new Syntaxe("intersection"); Syntaxe from1 = new Syntaxe("from");
+        Syntaxe from = new Syntaxe("from"); Syntaxe and = new Syntaxe("and"); Syntaxe join = new Syntaxe("join");
+        Syntaxe produit = new Syntaxe("produit"); Syntaxe difference = new Syntaxe("difference"); //difference
+        Syntaxe in = new Syntaxe("in"); Syntaxe division = new Syntaxe("division");
+        union.setUnion(from); inter.setUnion(from); join.setUnion(from); produit.setUnion(from);//from1.setUnion(from);
+        
+        //<------------Syntaxe------------------->
+        Syntaxe[] syntaxes = {union, inter, from1, and, join, produit, difference, in, division};
+        return syntaxes;
+    }
+
+    public Syntaxe[] getLanguageSQL () {
+        Syntaxe select = new Syntaxe("select"); Syntaxe etoile = new Syntaxe("*");
+        Syntaxe in = new Syntaxe("in"); Syntaxe and = new Syntaxe("and");
+        Syntaxe from = new Syntaxe("from"); Syntaxe create = new Syntaxe("create");
+        Syntaxe table = new Syntaxe("table"); Syntaxe values = new Syntaxe("values"); 
+        Syntaxe insert = new Syntaxe("insert"); Syntaxe into = new Syntaxe("into");
+
+        //<-----------Syntaxe---------------->
+        Syntaxe[] sql = { select, etoile, in, and, from, create, table, values, insert, into}; 
+        return sql;
+    }
     
     //************************************************************************************* */
 
@@ -269,11 +307,10 @@ public class Fonction {
         
         Table relation = new Table();
 
-        //////////////////SELECT/////////////////////////
+        //////////////////CREATE/////////////////////////
         if(votreRequete[0].equalsIgnoreCase(languageSql[0].getSyntaxe()) == false) {
             //Si false throw new Exception requete invalide--------------
 
-            //////////////////////////////CREATE TABLE///////////////////////////////////
             if(votreRequete[0].equalsIgnoreCase(languageSql[5].getSyntaxe()) == true) { // create table
                 
                 if(votreRequete[1].equalsIgnoreCase(languageSql[6].getSyntaxe()) == true) { //le table
@@ -288,7 +325,7 @@ public class Fonction {
                         
                         in.insertDescribe(nomTable, colType);
                         
-                        Object[] descCreated = in.getEnteteTable(nomTable);
+                        Object[] descCreated = in.getcolonneTable(nomTable);
                         
                         Object[][]message = new Object[1][descCreated.length];
                         
@@ -319,15 +356,15 @@ public class Fonction {
                     
                     String [] values = getDonneeInsertion(request);
                     
-                    in.insertData(nomTable, values);
+                    in.insertData(nomTable, values);    
                     
                     System.out.println("insertion effectuee avec succes");
                     
                     Object[][] data = in.lire(nomTable);
                     
-                    Object[] entete = in.getEnteteTable(nomTable);
+                    Object[] colonne = in.getcolonneTable(nomTable);
                     
-                    relation = new Table(entete, data);
+                    relation = new Table(colonne, data);
                     
                     relation.setNom(nomTable);
                 }
@@ -336,24 +373,24 @@ public class Fonction {
                 }
             }
         
-        }
         
+        }
         else if(votreRequete[0].equalsIgnoreCase(languageSql[0].getSyntaxe()) == true){     //true ny select
         
             ////////////////UNION///////////////////////
             if(votreRequete[1].equalsIgnoreCase(languageSql[1].getSyntaxe()) == true) {    //ra etoile
                 
-                Syntaxe [] motsCles = getSyntaxeOperation();
+                Syntaxe [] syntaxe = getSyntaxeOperation();
                 
-                if(votreRequete[2].equalsIgnoreCase(motsCles[0].getSyntaxe()) == true) {
+                if(votreRequete[2].equalsIgnoreCase(syntaxe[0].getSyntaxe()) == true) {    //Union
                     
-                    if(votreRequete[3].equalsIgnoreCase(motsCles[0].getUnion().getSyntaxe()) == true) { //frommmm
+                    if(votreRequete[3].equalsIgnoreCase(syntaxe[2].getSyntaxe()) == true) { //frommmm
                         
                         String table = votreRequete[4];
                         
                         if(in.isInDatabase(table) == true) {
                             
-                            if(votreRequete[5].equalsIgnoreCase(motsCles[3].getSyntaxe()) == true) { //anddd
+                            if(votreRequete[5].equalsIgnoreCase(syntaxe[3].getSyntaxe()) == true) { //anddd
                                 
                                 String table2 = votreRequete[6];
                                 
@@ -361,19 +398,19 @@ public class Fonction {
                                     
                                     Operation op = new Operation();
                                     
-                                    Object[] entete1 = in.getEnteteTable(table);
+                                    Object[] colonne1 = in.getcolonneTable(table);
                                     
                                     Object[][] data1 = in.lire(table); 
                                     
-                                    Table t1 = new Table(entete1, data1);
+                                    Table t1 = new Table(colonne1, data1);
                                     
                                     t1.setNom(table);
                                     
-                                    Object[] entete2 = in.getEnteteTable(table2);
+                                    Object[] colonne2 = in.getcolonneTable(table2);
                                     
                                     Object[][] data2 = in.lire(table2); 
                                     
-                                    Table t2 = new Table(entete2, data2);
+                                    Table t2 = new Table(colonne2, data2);
                                     
                                     t2.setNom(table2);
 
@@ -396,15 +433,15 @@ public class Fonction {
                 }
                 
                 /////////////////intersection///////////////////////// 
-                else if(votreRequete[2].equalsIgnoreCase(motsCles[1].getSyntaxe()) == true) {
+                else if(votreRequete[2].equalsIgnoreCase(syntaxe[1].getSyntaxe()) == true) {
                     
-                    if(votreRequete[3].equalsIgnoreCase(motsCles[1].getUnion().getSyntaxe()) == true) { //frommm
+                    if(votreRequete[3].equalsIgnoreCase(syntaxe[1].getUnion().getSyntaxe()) == true) { //frommm
                         
                         String table = votreRequete[4];
                         
                         if(in.isInDatabase(table) == true) {
                             
-                            if(votreRequete[5].equalsIgnoreCase(motsCles[3].getSyntaxe()) == true) { //anddd
+                            if(votreRequete[5].equalsIgnoreCase(syntaxe[3].getSyntaxe()) == true) { //anddd
                                 
                                 String table2 = votreRequete[6];
                                 
@@ -412,19 +449,19 @@ public class Fonction {
                                     
                                     Operation op = new Operation();
                                     
-                                    Object[] entete1 = in.getEnteteTable(table);
+                                    Object[] colonne1 = in.getcolonneTable(table);
                                     
                                     Object[][] data1 = in.lire(table); 
                                     
-                                    Table t1 = new Table(entete1, data1);
+                                    Table t1 = new Table(colonne1, data1);
                                     
                                     t1.setNom(table);
                                     
-                                    Object[] entete2 = in.getEnteteTable(table2);
+                                    Object[] colonne2 = in.getcolonneTable(table2);
                                     
                                     Object[][] data2 = in.lire(table2);
                                     
-                                    Table t2 = new Table(entete2, data2);
+                                    Table t2 = new Table(colonne2, data2);
                                     
                                     t2.setNom(table2);
 
@@ -447,7 +484,7 @@ public class Fonction {
                     }
                 }
                 //////////////////////////SELECTION/////////////////////////////////////
-                else if(votreRequete[2].equalsIgnoreCase(motsCles[2].getSyntaxe()) == true) {
+                else if(votreRequete[2].equalsIgnoreCase(syntaxe[2].getSyntaxe()) == true) {
                     
                     String table = votreRequete[3];
                     
@@ -463,7 +500,7 @@ public class Fonction {
                                 
                                 String operateur = votreRequete[6];
                                 
-                                Object[] colonnes = in.getEnteteTable(table);
+                                Object[] colonnes = in.getcolonneTable(table);
                                 
                                 Object[][] data = in.lire(table);
                                 
@@ -482,6 +519,107 @@ public class Fonction {
                         System.out.println("requete invalide");
                     }
                 }
+                
+                /////////////////////////////////////////Produit cartesien///////////////////////////
+                else if(votreRequete[2].equalsIgnoreCase(syntaxe[5].getSyntaxe()) == true) {
+                    
+                    if(votreRequete[3].equalsIgnoreCase(syntaxe[0].getUnion().getSyntaxe()) == true) { //frommmm
+                        
+                        String table = votreRequete[4];
+                        
+                        if(in.isInDatabase(table) == true) {
+                            
+                            if(votreRequete[5].equalsIgnoreCase(syntaxe[3].getSyntaxe()) == true) { //sy
+                                
+                                String table2 = votreRequete[6];
+                                
+                                if(in.isInDatabase(table2) == true) {
+                                    
+                                    Operation op = new Operation();
+                                    
+                                    Object[] colonne1 = in.getcolonneTable(table);
+                                    
+                                    Object[][] data1 = in.lire(table); 
+                                    
+                                    Table t1 = new Table(colonne1, data1);
+                                    
+                                    t1.setNom(table);
+                                    
+                                    Object[] colonne2 = in.getcolonneTable(table2);
+                                    
+                                    Object[][] data2 = in.lire(table2); 
+                                    
+                                    Table t2 = new Table(colonne2, data2);
+                                    
+                                    t2.setNom(table2);
+                                    
+                                    return op.produitCartesien(t1, t2);
+                                }
+                                else throw new Exception("aucun database ne correspond a "+ table2);
+                            }
+
+                            System.out.println("requete invalide");
+                        }
+                        else {
+                            throw new Exception("aucun database ne correspond a "+ table);
+                        }
+                    }
+                    else {
+                        System.out.println("requete invalide");
+                    }
+                }
+
+                //////////////////////////////difference/////////////////////////////// 
+                else if(votreRequete[2].equalsIgnoreCase(syntaxe[6].getSyntaxe()) == true) {
+                    
+                    if(votreRequete[3].equalsIgnoreCase(syntaxe[2].getSyntaxe()) == true) { //from
+                        
+                        String table = votreRequete[4];
+                        
+                        if(in.isInDatabase(table) == true) {
+                            
+                            if(votreRequete[5].equalsIgnoreCase(syntaxe[7].getSyntaxe()) == true) { // innnn
+                                
+                                String table2 = votreRequete[6];
+                                
+                                if(in.isInDatabase(table2) == true) {
+                                    
+                                    Operation op = new Operation();
+                                    
+                                    Object[] colonne1 = in.getcolonneTable(table);
+                                    
+                                    Object[][] data1 = in.lire(table); 
+                                    
+                                    Table t1 = new Table(colonne1, data1);
+                                    
+                                    t1.setNom(table);
+                                    
+                                    Object[] colonne2 = in.getcolonneTable(table2);
+                                    
+                                    Object[][] data2 = in.lire(table2); 
+                                    
+                                    Table t2 = new Table(colonne2, data2);
+                                    
+                                    t2.setNom(table2);
+                                    
+                                    return op.difference(t1,t2);
+                                }
+                                else throw new Exception("aucun database ne correspond a "+ table2);
+                            }
+
+                            else
+                                throw new Exception("requete invalide a partir de " + votreRequete[5]);
+                        }
+                        else {
+                            throw new Exception("aucun database ne correspond a "+ table);
+                        }
+                    }
+                    else {
+                        System.out.println("requete invalide");
+                    }
+                }
+
+                /////////////////////////////////division///////////////////////////////// 
                 
                 else {
                     throw new Exception("request invalide a partir de "+votreRequete[2]);
@@ -508,11 +646,11 @@ public class Fonction {
                     
                     Operation op = new Operation();
                     
-                    Object[] entete = in.getEnteteTable(table);
+                    Object[] colonne = in.getcolonneTable(table);
                     
                     Object[][] data = in.lire(table);
-                    // relation = new Table(entete, data); 
-                    relation = op.projection(entete, data, colonnes);
+                    // relation = new Table(colonne, data); 
+                    relation = op.projection(colonne, data, colonnes);
                     
                     relation.setNom(table);
                 }
@@ -543,17 +681,17 @@ public class Fonction {
 
     public void displayResult(Table table) throws Exception {
 
-        Object[] entete = table.getEntete();
+        Object[] colonne = table.getcolonne();
         
         Object[][] data = table.getData();
 
         if (data.length > 0) {
 
-            for (Object attribut : entete) {
-                System.out.print("|    " + attribut.toString() + "    |   "); // entete
+            for (Object attribut : colonne) {
+                System.out.print("|    " + attribut.toString() + "    |   "); // colonne
             }
             System.out.println();
-            System.out.println("------------------------------------------------");
+            System.out.println("------------------------------------------------------------------");
 
             for (Object[] lo : data) {
                 for (Object o : lo) {
@@ -564,19 +702,19 @@ public class Fonction {
                     }
                 }
                 System.out.println("");
-                System.out.println("------------------------------------------------");
+                System.out.println("--------------------------------------------------------------------");
             }
         }
 
         else {
             System.out.println();
-            System.out.println("No result fetch the request");
+            System.out.println("Table vide");
             System.out.println();
         }
     }
 
     public String [] vectToStringTab(Vector v) throws Exception {
-        if(v.size() <= 0) throw new Exception("vector empty");
+        if(v.size() <= 0) throw new Exception("vector null");
 
         String [] r = new String[v.size()];
         for (int i = 0; i < v.size(); i++) {
@@ -586,44 +724,74 @@ public class Fonction {
         return r;
     }
 
-    public Object [][] getData2DimBytri (Object[][] lo2) throws Exception {
-        Object[][]rep = new Object[lo2.length][lo2[0].length];
-        Vector vToTri = new Vector();
-        for (int i = 0; i < lo2.length; i++) {
-            vToTri.add(lo2[i][0]); // tri par colonne 1 par defaut
+    public String constrSelection(String [] colonnes)throws Exception {
+        int k = 0;
+        String c = "";
+        for (int i = 0; i < colonnes.length - 1; i++) { //le farany tsy misy virgule
+            c = c + colonnes[i] + ",";
+            k++;
         }
 
-        InputOutput e = new InputOutput();
-        Object[] type = e.getTypesTableInFile("inscription");
-        String typeStr = type[0].toString();
-        if(typeStr.equalsIgnoreCase("string") == true) {
-            vToTri.sort(null); //tri
-        } 
+        c = c + colonnes[k];
+        return c;
+    }
+
+    public int[] getIndNonCommonCol (Table t1, Table t2) throws Exception {
+        int[] indColCom = getIndCommonCol(t1, t2);
+        Vector indVect = new Vector();
+    
+        Object[] colonne1 = t1.getcolonne();
+        for (int j = 0; j < colonne1.length; j++) {
+            if(getIntTab(j, indColCom) == false) {
+                indVect.add(j);
+            }
+        }
         
-        Object[] indTri = vToTri.toArray();
-        
-        for (Object[] ligne : lo2) {
-            for (int i = 0; i < indTri.length; i++) {
-                if(Integer.parseInt(indTri[i].toString()) == Integer.parseInt(ligne[0].toString())) {
-                    rep[i] = ligne;
+
+       if(indVect.size() == 0) throw new Exception("Pas de colonne non en commun");
+
+       int[] indCol = new int[indVect.size()];
+        for (int i = 0; i < indCol.length; i++) {
+            indCol[i] = (int) indVect.get(i);
+            //System.out.println(indCol[i]);
+        }
+
+        return indCol;
+    }
+
+    public int[] getIndCommonCol (Table t1, Table t2) throws Exception {
+        Vector indVect = new Vector();
+        Object[] colonne1 = t1.getcolonne();
+        Object [] colonne2 = t2.getcolonne();
+        for (int i = 0; i < colonne1.length; i++) {
+            for (int j = 0; j < colonne2.length; j++) {
+                if(colonne1[i].toString().equals(colonne2[j].toString()) == true) {
+                    indVect.add(i);
                 }
             }
         }
 
-        return rep;
+       if(indVect.size() == 0) throw new Exception("Pas de colonne en commun");
+
+       int[] indCol = new int[indVect.size()];
+        for (int i = 0; i < indCol.length; i++) {
+            indCol[i] = (int) indVect.get(i);
+        }
+
+        return indCol;
     }
 
     public boolean isInTable(Object[] ligne, Table t) throws Exception {
         Object[][]data = t.getData();
         for (Object[] l : data) {
-            if(checkStringMverina(ligne, l) == true) {
+            if(isDoublureString(ligne, l) == true) {
                 return true;
             }
         }
         return false;
     }
 
-    public boolean checkStringMverina (Object[] lo1, Object[] lo2) {
+    public boolean isDoublureString (Object[] lo1, Object[] lo2) {
         for (int i = 0; i < lo1.length; i++) {
             if(lo1[i].toString().equals(lo2[i].toString()) == false) {
                 return false;
@@ -631,42 +799,5 @@ public class Fonction {
         }
         return true;
     }
-
-    public Object[] combineObj(Object[] lo1, Object[] lo2) {
-
-        int t1 = 0;
-        int t2 = 0;
-
-        if (lo1 == null) {
-            t1 = 0;
-        } else {
-            t1 = lo1.length;
-        }
-
-        if (lo2 == null) {
-            t2 = 0;
-        } else {
-            t2 = lo2.length;
-        }
-
-        Object[] rep = new Object[t1 + t2];
-        int i = 0;
-        if (lo1 != null) {
-            for (Object Object : lo1) {
-                rep[i] = Object;
-                i++;
-            }
-        }
-
-        if (lo2 != null) {
-            for (Object Object : lo2) {
-                rep[i] = Object;
-                i++;
-            }
-        }
-
-        return rep;
-    }
-
 
 }
