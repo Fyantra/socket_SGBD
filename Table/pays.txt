@@ -8,5 +8,5 @@
 -----
 5;;Australie;;Oceanie;;3.0E8;;
 -----
-6;;Bresil;;Amerique Latine;;6.3E8;;
+6;;Bresil;;AmeriqueLatine;;6.3E8;;
 -----
