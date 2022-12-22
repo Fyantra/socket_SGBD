@@ -1,8 +1,0 @@
-nomJoueur;;String
------
-age;;int
------
-salaire;;double
------
-equipe;;String
------

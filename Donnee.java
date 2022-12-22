@@ -25,13 +25,6 @@ public class Donnee{
 
         Joueur[] listeJoueur = { j1, j2, j3, j4, j5, j6};
 
-        Joueur j7 = new Joueur("Griezmann", 31, 27000000, "Atletico de madrid");
-        Joueur j8 = new Joueur("Mane", 30, 50000000, "Bayern");
-        Joueur j9 = new Joueur("Haaland", 23, 300000000, "Man City");
-
-        Joueur[] listeJoueur2 = { j7, j8, j9, j3, j6};
-
-
         Pays p1 = new Pays(1, "Madagascar", "Afrique", 25000000);
         Pays p2 = new Pays(2, "Pays-Bas", "Europe", 500000);
         Pays p3 = new Pays(3, "Canada", "Amerique", 564000000);
@@ -40,7 +33,6 @@ public class Donnee{
         Pays p6 = new Pays(6, "Bresil", "Amerique Latine", 630000000);
         
         Pays[] listePays = { p1, p2, p3, p4, p5, p6 };
-
 
         Personne pers1 = new Personne(1, "Koto", 26, "Journaliste");
         Personne pers2 = new Personne(2, "Bertrand", 55, "Directeur");
@@ -57,14 +49,10 @@ public class Donnee{
             in.insertDescribe(listeJoueur, "joueur");
             in.insertDescribe(listePays, "pays");
             in.insertDescribe(listePersonne, "personne");
-            in.insertDescribe(listeJoueur2, "joueurr");
-
 
             in.insertData(listeJoueur, "joueur");
             in.insertData(listePays, "pays");
             in.insertData(listePersonne, "personne");
-            in.insertData(listeJoueur2, "joueurr");
-
             
         } catch (Exception e) {
             System.out.println("ecriture sur fichier echouee");
@@ -80,12 +68,7 @@ public class Donnee{
         Joueur j5 = new Joueur("Dimaria", 35, 25000000, "Juventus");
         Joueur j6 = new Joueur("Lewandowski", 34, 76000000, "Barcelone");
 
-        Joueur j7 = new Joueur("Griezmann", 31, 27000000, "Atletico de madrid");
-        Joueur j8 = new Joueur("Mane", 30, 50000000, "Bayern");
-        Joueur j9 = new Joueur("Haaland", 23, 300000000, "Man City");
-
         Joueur[] listeJoueur = { j1, j2, j3, j4, j5, j6};
-        Joueur[] listeJoueur2 = { j7, j8, j9, j3, j6};
 
         Pays p1 = new Pays(1, "Madagascar", "Afrique", 25000000);
         Pays p2 = new Pays(2, "Pays-Bas", "Europe", 500000);
@@ -107,9 +90,9 @@ public class Donnee{
 
         Vector db = new Vector();
         db.add(listeJoueur);
-        db.add(listeJoueur2);
         db.add(listePays);
         db.add(listePersonne);
+
         return db;
     }
 

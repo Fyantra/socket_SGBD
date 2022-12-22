@@ -1,12 +1,11 @@
 package socket;
 
 import java.io.*;
-import java.net.*;
+import java.net.Socket;
 import java.util.Scanner;
-import java.rmi.server.*;
 
 import fonction.Fonction;
-import objets.*;
+import objets.Table;
 /*
  * www.codeurjava.com
  */

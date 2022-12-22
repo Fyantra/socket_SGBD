@@ -3,10 +3,9 @@ package socket;
 import java.io.*;
 import java.net.*;
 import java.util.Scanner;
-import java.rmi.server.*;
 
 import fonction.Fonction;
-import objets.*;
+import objets.Table;
 
 /*
  * www.codeurjava.com
@@ -47,7 +46,7 @@ public class Serveur {
 
             Fonction f = new Fonction();
 
-            Thread receive = new Thread(new Runnable() {
+            Thread recevoir = new Thread(new Runnable() {
 
                 @Override
                 public void run() {
@@ -101,7 +100,7 @@ public class Serveur {
                 }
             });
             
-            receive.start();
+            recevoir.start();
         
         } catch (IOException e) {
             e.printStackTrace();

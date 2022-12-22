@@ -9,10 +9,10 @@ import fonction.Fonction;
 public class InputOutput {
 
     
-    // path ITU
-    public static String describeTable = "D:/Etude ITU/Fenarana L2/S3/Mr Naina/Projet SGBD/Projet socket-SGBD/describeTable/";
+    //ITU
+    public static String describeTable = "D:/Etude ITU/Fianarana L2/Mr Naina/Projet/SGBD tena izy/Serveur/describeTable/";
     
-    public static String donneeTable = "D:/Etude ITU/Fenarana L2/S3/Mr Naina/Projet SGBD/Projet socket-SGBD/Table/";
+    public static String donneeTable = "D:/Etude ITU/Fianarana L2/Mr Naina/Projet/SGBD tena izy/Serveur/Table/";
 
     /////////////////////////////////
     public int countData1(Object o) throws Exception {
@@ -75,7 +75,10 @@ public class InputOutput {
             
             String in = field.get(obj).toString() + ";;";
             
-           
+            //f.setAccessible(true);
+            /*if (w.equals("") || w.equals(" ")) {
+                w = "0";
+            }*/
             buff.write(in);
         }
         buff.newLine();
@@ -101,7 +104,9 @@ public class InputOutput {
 
         for (String s : values) {
             String in = s + ";;";
-            
+            /*if (w.equals("") || w.equals(" ")) {
+                w = "0";
+            }*/
             buff.write(in);
         }
         buff.newLine();
@@ -157,20 +162,22 @@ public class InputOutput {
     //*********************************************************************************** */
     
     public boolean isInDatabase(String nomTable) throws Exception {
-        
+        // String repertoire = "database/table." + nomTable;
+        // String location = "Home";
+        // String repertoire = "E:/JAVA/S3/BD Relationnelle/database/table." + nomTable;
         String repertoire = donneeTable+ nomTable + ".txt";
         File file = new File(repertoire);
         if(file.exists() == true) {
             return true;}
         
         throw new Exception("le fichier "+repertoire+ " est introuvable");
-       
+        // return false;
     }
 //***************************************************************************** */
     
     public boolean checkColonne(String colonne, String nomTable) throws Exception {
         
-        Object[] colonnes = getcolonneTable(nomTable);   //maka ny colonne ao am table
+        Object[] colonnes = getEnteteTable(nomTable);   //maka ny colonne ao am table
         
         for (Object obj : colonnes) {
         
@@ -239,14 +246,14 @@ public class InputOutput {
         }
     }
 
-    public void insertData(Object[] obj, String nomTable) throws Exception {
+    public void insertData(Object[] lo, String nomTable) throws Exception {
         File file = new File("Table");
         
         FileWriter write = new FileWriter(new File("Table/" + nomTable +".txt"), true);
         BufferedWriter buff = new BufferedWriter(write);
 
         int i = 0;
-        for (Object o : obj) {
+        for (Object o : lo) {
             Field[] listeAttribut = o.getClass().getDeclaredFields();
             for (Field field : listeAttribut) {
                 field.setAccessible(true);
@@ -302,7 +309,7 @@ public class InputOutput {
     }
     //*********************************************************************************** */
     
-    public Object[] getcolonneTable (String nomTable) throws Exception {
+    public Object[] getEnteteTable (String nomTable) throws Exception {
         
         String repertoire = describeTable+ nomTable + ".txt";
         
